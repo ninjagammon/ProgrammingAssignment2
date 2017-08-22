@@ -1,15 +1,34 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Thes two functions allow to create and smartly inverse matrices
+## using cached values.
 
-## Write a short comment describing this function
+## Smart matrix object, carries a cahce of its own inverse
 
 makeCacheMatrix <- function(x = matrix()) {
-
+    inv <- NULL
+    set <- function(y) {
+        x <<- y
+        inv <<- NULL
+    }
+    get <- function() x
+    setinv <- function(newinv) inv <<- newinv
+    getinv <- function() inv
+    list(set = set, get = get,
+         setinv = setinv,
+         getinv = getinv)
 }
 
 
-## Write a short comment describing this function
+## Solves for inverse of matrix, writes it into cache
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+    ## Returns a matrix that is the inverse of 'x'
+    inv <- x$getinv()
+    if(!is.null(inv)) {
+        message("getting cached data")
+        return(inv)
+    }
+    matrix <- x$get()
+    inv <- solve(matrix, ...)
+    x$setinv(inv)
+    inv
 }
